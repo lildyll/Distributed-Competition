@@ -36,13 +36,15 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 	keyChat = keyboard_check_pressed(vk_enter) or keyboard_check(vk_enter);
 	keyBlock = mRight or keyboard_check(vk_shift);
 	
-	if keyboard_check_pressed(vk_escape) {
+	if keyboard_check_pressed(vk_escape) and canChat {
 		if instance_exists(obj_options) {
 			instance_destroy(obj_options);
 		} else {
 			with instance_create_layer(room_width/2, room_height/2, "Heaven", obj_options) {
 				col = other.mainCol;
+				player = other.id;
 			}
+			canChat = false;
 		}
 	}
 	
@@ -56,8 +58,6 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 			canChat = false;
 		}
 	}
-	
-	if !instance_exists(chat) chat = noone;
 	
 	if instance_exists(obj_options) or instance_exists(obj_textbox) {
 		mLeft =  false;
@@ -103,7 +103,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 				state = pState.hit;
 			}
 		}
-		instance_destroy(_collisionBox); //maybe? might want to keep it to hit multiple people
+		//instance_destroy(_collisionBox); //maybe? might want to keep it to hit multiple people
 	}
 	
 	
@@ -310,7 +310,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 						if connected {
 							var _hit = scr_sendPlayerHit(playerID, myHit.x, myHit.y, 
 							myHit.image_xscale, myHit.image_yscale, myHit.damage, hitDir);
-						
+							
 							if playerHost {
 								network_send_packet(obj_server.client, _hit, buffer_tell(_hit));
 							} else {
@@ -334,10 +334,13 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 							
 							buffer_delete(_hit);
 						}
+						
 						instance_destroy(myHit);
 					}
+					
 					myHit = noone;
 				}
+				
 				if image_index < attack.moveFrame {
 					xSpeed = attack.moveSpd * sign(image_xscale);
 				} else {

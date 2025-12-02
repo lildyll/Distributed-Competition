@@ -11,7 +11,6 @@ if (string_length(_currentText) + 1) * spacing >= sprite_width {
 
 if keyboard_check_pressed(vk_enter) {
 	if text != "" {
-		show_debug_message("sent");
 		var _buff = buffer_create(32, buffer_grow, 1);
 		buffer_seek(_buff, buffer_seek_start, 0);
 		buffer_write(_buff, buffer_u8, network.text);			//set the id of the packet to text

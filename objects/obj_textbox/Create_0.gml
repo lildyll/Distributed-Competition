@@ -2,6 +2,7 @@ text = "";
 keyboard_string = "";
 textXStart = x - sprite_width/2 + 3;
 textX = x - sprite_width/2 + 1;
+y = room_height - 16;
 textY = y;
 spacing = 6;
 playerID = 0;

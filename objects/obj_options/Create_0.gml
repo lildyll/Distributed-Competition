@@ -1,6 +1,7 @@
 selection = 0;
 selectionMax = 3;
 selections = ["resume", "music", "sfx", "quit"];
+player = noone;
 
 col = c_white;
 
@@ -11,3 +12,5 @@ topHeight = 38;
 
 keyUpPressed = keyboard_check_pressed(vk_up) or keyboard_check_pressed(ord("W"));
 keyDownPressed = keyboard_check_pressed(vk_down) or keyboard_check_pressed(ord("S"));
+
+depth = -1000;

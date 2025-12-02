@@ -13,6 +13,7 @@ yellowY = 0;
 function readStage(_matrix) {
 	var _tileSize = 16;
 	instance_destroy(obj_floor); //remove all prev floors
+	instance_destroy(obj_attackBox); //remove stray attacks
 	for (var r = 0; r < array_length(_matrix); r++) {
 		for (var c = 0; c < array_length(_matrix[r]); c++) {
 			var _x = c * _tileSize + 8; //+8 to center it

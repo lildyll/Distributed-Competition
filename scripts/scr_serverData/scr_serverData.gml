@@ -79,10 +79,39 @@ function scr_serverData() {
 			buffer_delete(_disconnectBuff);
 		break;
 		#endregion
-		#region next round
-		case  network.nextRound:
+		#region chat
+		case network.text:
+			var _playerID = buffer_read(_packet, buffer_u8);
 			
+			var _player = ds_map_find_value(instances, _playerID);
+			var _text = buffer_read(_packet, buffer_string);
+			
+			//if the player exists, create the text and assign it to that player instance
+			if instance_exists(_player) {
+				if !instance_exists(_player.chat) or _player.chat.text != _text {//if the player already has a chat over its head delete it
+				instance_destroy(_player.chat);
+				var _chat = instance_create_layer(_player.x, _player.y, "Heaven", obj_textOverPlayer);
+					_chat.player = _player;
+					_chat.text = _text;
+					
+					_player.chat = _chat;
+				}
+			}
+			
+			//now send to other clients
+			var _buff = buffer_create(32, buffer_grow, 1);
+			buffer_seek(_buff, buffer_seek_start, 0);
+			buffer_write(_buff, buffer_u8, network.text);			//set the id of the packet to text
+			buffer_write(_buff, buffer_u8, _playerID);				//send the hit ID to know what player said it
 
+			buffer_write(_buff, buffer_string, _text);									
+		
+			//send to all players
+			for (var i = 0; i < ds_list_size(totalPlayers); i++) {
+				network_send_packet(ds_list_find_value(totalPlayers,i), _buff, buffer_tell(_buff));
+			}
+			
+			buffer_delete(_buff);			//no memory leaks
 		break;
 		#endregion
 	}

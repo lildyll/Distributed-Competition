@@ -123,19 +123,22 @@ function scr_client() {
 		#endregion
 		#region chat
 		case network.text:
-			var _playerID = buffer_read(_packet, buffer_u16);
+		
+			var _playerID = buffer_read(_packet, buffer_u8);
 			
 			var _player = ds_map_find_value(instances, _playerID);
 			var _text = buffer_read(_packet, buffer_string);
-			show_debug_message("recieved");
+			
 			//if the player exists, create the text and assign it to that player instance
 			if instance_exists(_player) {
-				if instance_exists(_player.chat) instance_destroy(_player.chat); //if the player already has a chat over its head delete it
-				var _chat = instance_create_layer(_player.x, _player.y, "Heaven", obj_textOverPlayer)
-					_chat.player = _player;
-					_chat.text = _text;
+				if !instance_exists(_player.chat) or _player.chat.text != _text  {
+					instance_destroy(_player.chat);
+					var _chat = instance_create_layer(_player.x, _player.y, "Heaven", obj_textOverPlayer)
+						_chat.player = _player;
+						_chat.text = _text;
 					
-					_player.chat = _chat;
+						_player.chat = _chat;
+				} 
 			}
 		break;
 		#endregion

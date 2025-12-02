@@ -8,5 +8,3 @@ if instance_exists(player) {
 }
 
 if timer <= 0 instance_destroy();
-
-show_debug_message("im alive!");

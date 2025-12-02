@@ -43,6 +43,14 @@ function scr_doText(_text = "", _col1 = col, _x = x, _y = y, _spacing = spacing,
 				lValue = A + 29;
 			} else if letter == "'" {
 				lValue = A + 30;
+			} else if letter == "?" {
+				lValue = A + 31;
+			} else if letter == ":" {
+				lValue = A + 32;
+			} else if letter == "(" {
+				lValue = A + 33;
+			} else if letter == ")" {
+				lValue = A + 34;
 			}
 			
 			if _draw {

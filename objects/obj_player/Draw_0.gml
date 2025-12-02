@@ -10,4 +10,4 @@ if flash {
 
 draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, angle, _mainCol, image_alpha);
 
-//draw_text(x, y + 4, string(blockTime));
+//draw_text(x, y + 4, string(state));
