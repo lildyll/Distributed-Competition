@@ -1,3 +1,3 @@
 /// @description Join
-instance_create_depth(x, y, depth, obj_client);
+room_goto(rm_client);
 instance_destroy();

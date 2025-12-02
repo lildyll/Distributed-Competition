@@ -7,6 +7,7 @@ function scr_loadPlayerHit(_packet) {
 	var _xScale = buffer_read(_packet, buffer_s16);		
 	var _yScale = buffer_read(_packet, buffer_s16);		
 	var _dmg = buffer_read(_packet, buffer_s8);			
+	var _dir = buffer_read(_packet, buffer_u16);			
 
 	var _data = {
 		hitID:		_hitID,	
@@ -14,7 +15,8 @@ function scr_loadPlayerHit(_packet) {
 		yy:			_y,
 		xScale:		_xScale,
 		yScale:		_yScale,
-		dmg:		_dmg,			
+		dmg:		_dmg,		
+		dir:		_dir,
 	}
 	
 	return _data;

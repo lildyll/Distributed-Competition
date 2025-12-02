@@ -1,3 +1,3 @@
-draw_self();
+//draw_self();
 
-draw_text(x, y, string(damage));
+//draw_text(x, y, string(dir));

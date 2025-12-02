@@ -2,6 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function scr_loadPlayerData(_packet) {
 	var _playerID =		buffer_read(_packet, buffer_u16);
+	var _playerState =	buffer_read(_packet, buffer_u8);
 	var _playerX =		buffer_read(_packet, buffer_s16);
 	var _playerY =		buffer_read(_packet, buffer_s16);
 	var _spriteIndex =	buffer_read(_packet, buffer_u16);
@@ -11,6 +12,7 @@ function scr_loadPlayerData(_packet) {
 	var _xScale =		buffer_read(_packet, buffer_s8);
 	var _data = {
 		playerID:		_playerID,	
+		playerState:	_playerState,	
 		playerX:		_playerX,	
 		playerY:		_playerY,	
 		spriteIndex:	_spriteIndex,

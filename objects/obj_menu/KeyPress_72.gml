@@ -1,3 +1,3 @@
 /// @description Host
-instance_create_depth(x, y, depth, obj_server);
+room_goto(rm_host);
 instance_destroy();
