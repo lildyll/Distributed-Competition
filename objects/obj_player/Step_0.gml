@@ -92,6 +92,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 			blockTime = blockTimeMax;
 			state = pState.idle;
 		} else if _collisionBox.myID != playerID { //not my hit => get hit
+			audio_play_sound(choose(snd_hit_1, snd_hit_2, snd_hit_3), 1, false);
 			gpHitGround = false;
 			pushBack(_collisionBox);
 			var _newHp = hp - _collisionBox.damage;
@@ -124,6 +125,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 			ySpeed = jumpSpd;
 			state = pState.jump;
 			instance_create_depth(x, y + 7, depth, obj_smoke);
+			audio_play_sound(snd_jump, 1, false);
 			canJump = false;
 			coyote = 0;
 			image_index = 0;
@@ -157,6 +159,12 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 			image_speed = 0;
 			xSpeed = 0;
 			ySpeed = 0;
+			pushBackX = 0;
+			pushBackY = 0;
+			doSprite = true;
+			stateJump = false;
+			gpHitGround = false;
+			myHit = noone;
 
 		break;
 		
@@ -181,6 +189,11 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 		break;
 		
 		case pState.run: 
+		
+			if image_index == 2 or image_index == 7 {
+				audio_play_sound(choose(snd_walk_1, snd_walk_2, snd_walk_3), 1, false);
+			}
+		
 			stateJump = true;
 			if _leftRight != 0 image_xscale = _leftRight;
 			xSpeed = (spd * _leftRight);
@@ -243,6 +256,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 			doSprite = false;
 			if ySpeed == 0 and place_meeting(x, y + 1, obj_floor) {
 				image_index = 15;
+				audio_play_sound(snd_walk_3, 1, false);
 				if xSpeed = 0 {
 					state = pState.idle;
 				} else {
@@ -397,6 +411,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 						y += sign(ySpeed);
 					}
 					gpHitGround = true;
+					audio_play_sound(snd_thud, 1, false);
 					ySpeed = 0;
 					image_index = gpEndFrame;
 					scr_screenShake(1, 20);
@@ -538,6 +553,18 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 		
 		buffer_delete(_buff);	//no memory leaks
 	}
+} else if instance_exists(obj_transition) or instance_exists(obj_textAnnouncement) {
+	image_speed = 0;
+	xSpeed = 0;
+	ySpeed = 0;
+	pushBackX = 0;
+	pushBackY = 0;
+	doSprite = true;
+	stateJump = false;
+	gpHitGround = false;
+	attack = attack_punch1;
+	myHit = noone;
+	state = pState.idle;
 } else { //not my player but spawn effects
 	if state == pState.jump and prevState != pState.jump {
 		instance_create_depth(x, y + 7 + 3, depth, obj_smoke); //extra due to "lag"

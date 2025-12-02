@@ -92,7 +92,9 @@ function scr_client() {
 					instance_destroy(_disconnectedPlayer);
 				}
 			} else { //if its you return to lobby
-				game_end();
+				network_destroy(client);
+				if room == rm_host network_destroy(server);
+				room_goto(rm_start);
 			}
 		break;
 		#region next round

@@ -9,3 +9,6 @@ if startFlicker {
 		bgTimer = 0;
 	}
 }
+
+audio_group_set_gain(MUSIC, global.volMUSIC);
+audio_group_set_gain(SFX, global.volSFX);

@@ -135,7 +135,7 @@ attack_groundpound = {
 	endFrame: gpEndFrame + 1,
 	moveFrame: 0,
 	moveSpd: 0,
-	xStretch: 2.5,
+	xStretch: 3,
 }
 
 //states

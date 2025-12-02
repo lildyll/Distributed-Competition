@@ -1,6 +1,6 @@
 text = "BLOOM";
 player = noone;
-hover = 32;
+hover = 16;
 
 timer = FPS * 4;
 
