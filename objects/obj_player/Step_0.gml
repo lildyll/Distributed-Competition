@@ -170,6 +170,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 		
 		case pState.idle:
 		grav = gravNormal;
+		attack = attack_punch1;
 		if doSprite {
 			if sprite_index != spr_player_idle {
 				image_index = 0;
@@ -189,7 +190,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 		break;
 		
 		case pState.run: 
-		
+			attack = attack_punch1;
 			if image_index == 2 or image_index == 7 {
 				audio_play_sound(choose(snd_walk_1, snd_walk_2, snd_walk_3), 1, false);
 			}
