@@ -34,6 +34,7 @@
     {"id":{"name":"obj_client","path":"objects/obj_client/obj_client.yy",},},
     {"id":{"name":"obj_floor","path":"objects/obj_floor/obj_floor.yy",},},
     {"id":{"name":"obj_god","path":"objects/obj_god/obj_god.yy",},},
+    {"id":{"name":"obj_ipSelection","path":"objects/obj_ipSelection/obj_ipSelection.yy",},},
     {"id":{"name":"obj_mapController","path":"objects/obj_mapController/obj_mapController.yy",},},
     {"id":{"name":"obj_menu","path":"objects/obj_menu/obj_menu.yy",},},
     {"id":{"name":"obj_options","path":"objects/obj_options/obj_options.yy",},},

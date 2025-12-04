@@ -5,8 +5,8 @@ if instance_exists(obj_player) {
 		if obj_player.keyAttack {
 			if text == "Host" {
 				room_goto(rm_host);
-			} else {
-				room_goto(rm_client);
+			} else if !instance_exists(obj_ipSelection) {
+				instance_create_layer(x, y, "Heaven", obj_ipSelection);
 			}
 		}
 	} else {

@@ -37,12 +37,12 @@ if keySelect {
 				with obj_client {
 					scr_disconnect();
 				}
-			} else {
-				if instance_exists(obj_server) {
-					with obj_server {
-						scr_disconnect();
-					}
+			} else if instance_exists(obj_server) {
+				with obj_server {
+					scr_disconnect();
 				}
+			} else {
+				game_end();
 			}
 		break;
 	}

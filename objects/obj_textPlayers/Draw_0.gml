@@ -9,3 +9,5 @@ if players >= 4 {
 if players > 1 {
 	scr_doText("Compete to start!", c_white, x, y + 16, 6, 8, 1, -200, .5, .25, 2);
 }
+
+scr_doText("IP : " + string(global.ip), c_white, x, y - 16, 6, 8, 1, 1, 0, 0);

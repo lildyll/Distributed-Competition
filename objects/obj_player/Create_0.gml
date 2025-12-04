@@ -129,7 +129,7 @@ gpSpeed = 3;
 
 attack_groundpound = {
 	sprite: spr_player_groundpound,
-	damage: 10,
+	damage: 5,
 	length: 4,
 	attackBoxFrame: 4, 
 	endFrame: gpEndFrame + 1,

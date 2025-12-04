@@ -1,5 +1,6 @@
 global.port = 7676;
-global.ip = "10.39.31.81"
+global.ipDefault = "192.168.137.1";
+global.ip = global.ipDefault;
 global.networkType = network_socket_tcp;
 
 global.music = -1;
@@ -21,7 +22,7 @@ enum network {
 global.nextStageMatrix = scr_stage(0);
 global.nextStageNumber = 0;
 
-global.volMUSICStart = .25;
+global.volMUSICStart = .3;
 global.volMUSIC = global.volMUSICStart;
 global.volSFXStart = .5;
 global.volSFX = global.volSFXStart;
