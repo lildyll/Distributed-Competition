@@ -13,11 +13,14 @@ if stage = 1 {
 	spd += acc;
 	drawHeightBottom += spd;
 	if drawHeightBottom <= drawHeight {
-		instance_destroy();
+		if instance_exists(obj_textLeaderboard) {
+			instance_destroy(obj_textLeaderboard);
+		}
 		with instance_create_layer(-100, -100, layer, obj_textAnnouncement) {
 			text = "fight!"
 			winnerColor = c_white;
 			holdTimer = FPS/2;
 		}
+		instance_destroy();
 	} 
 }

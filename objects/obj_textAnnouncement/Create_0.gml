@@ -10,7 +10,7 @@ stage = 1;
 scaleStart = .5;
 scaleSpd = .2;
 scale = scaleStart;
-scaleMax = 2;
+scaleMax = 3;
 holdTimer = FPS * 1.5;
 
 depth = -999;

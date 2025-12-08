@@ -18,7 +18,8 @@ enum iSpd {
 	run = 15,
 	jump = 10,
 	punch = 15,
-	slide = 15
+	slide = 15,
+	die = 15
 }
 
 image_speed = iSpd.idle;
@@ -40,6 +41,7 @@ grav = gravNormal;
 coyoteMax = 10;
 coyote = coyoteMax;
 canJump = false;
+canMove = false;
 stateJump = false;
 doSprite = true;
 slideDir = 0;
@@ -61,6 +63,10 @@ floorResistance = .2;
 yResistance = .3;
 blockTimeMax = FPS;
 blockTime = 0;
+
+hitBy = [];
+
+alarm[0] = 5; //so the player doesnt open chat/hit immediately when entering the lobby
 
 function pushBack(_hit) {
 	var _dir = _hit.dir;
@@ -129,9 +135,9 @@ gpSpeed = 3;
 
 attack_groundpound = {
 	sprite: spr_player_groundpound,
-	damage: 5,
+	damage: 10,
 	length: 4,
-	attackBoxFrame: 4, 
+	attackBoxFrame: 13, 
 	endFrame: gpEndFrame + 1,
 	moveFrame: 0,
 	moveSpd: 0,

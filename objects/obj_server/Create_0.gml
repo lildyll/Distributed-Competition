@@ -39,6 +39,7 @@ network_connect(client, ip, port);
 instances = ds_map_create();
 clientID = -1;
 player = noone;
+disconnectedID = -1;
 
 ds_map_add(instances, clientID, player);
 

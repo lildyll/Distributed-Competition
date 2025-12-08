@@ -90,6 +90,8 @@ function scr_client() {
 			if _disconnectedID != clientID {
 				if not is_undefined(_disconnectedPlayer) {
 					instance_destroy(_disconnectedPlayer);
+					disconnectedID = _disconnectedID;
+					alarm[2] = 10;
 				}
 			} else { //if its you return to lobby
 				network_destroy(client);
@@ -145,6 +147,24 @@ function scr_client() {
 		break;
 		#endregion
 		
+		#region leaderboard
+		case network.leaderboard:
+			var _player1 = buffer_read(_packet, buffer_u8);
+			var _player2 = buffer_read(_packet, buffer_u8);
+			var _player3 = buffer_read(_packet, buffer_u8);
+			var _player4 = buffer_read(_packet, buffer_u8);
+			
+			global.player1Wins = _player1;
+			global.player2Wins = _player2;
+			global.player3Wins = _player3;
+			global.player4Wins = _player4;
+			
+			if !instance_exists(obj_textLeaderboard) {
+				instance_create_layer(-100, -100, layer, obj_textLeaderboard);
+			}
+		break;
+		
+		#endregion
 		
 	}
 }

@@ -24,6 +24,20 @@ if ds_list_size(totalPlayers) > 1 { //at least two players
 			}
 		}
 	
+		//send leaderboard
+		var _leader = buffer_create(32, buffer_grow, 1);
+		buffer_write(_leader, buffer_u8, network.leaderboard);
+		buffer_write(_leader, buffer_u8, player1.wins);
+		buffer_write(_leader, buffer_u8, player2.wins);
+		buffer_write(_leader, buffer_u8, player3.wins);
+		buffer_write(_leader, buffer_u8, player4.wins);
+		
+		//send to all players
+		for (var i = 0; i < ds_list_size(totalPlayers); i++) {
+			network_send_packet(ds_list_find_value(totalPlayers,i), _leader, buffer_tell(_leader));
+		}
+		buffer_delete(_leader);
+	
 		//go to next stage
 		roundStart = false; //stop everyone from moving until transition is complete
 		stage++;

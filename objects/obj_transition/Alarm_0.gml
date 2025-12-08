@@ -16,3 +16,4 @@ if !instance_exists(obj_textAnnouncement) {
 		winnerColor = other.winnerColor;
 	}
 }
+

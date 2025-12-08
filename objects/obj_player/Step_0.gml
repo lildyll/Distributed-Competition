@@ -12,7 +12,7 @@ mainCol = cOrder[_colorIndex];
 if instance_exists(obj_ipSelection) exit;
 
 if (!connected or (instance_exists(obj_client) and playerID == obj_client.clientID) or playerHost)
-and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) {
+and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) and canMove {
 	
 	//check fallen off map
 	if y >= room_height + 32 {
@@ -88,22 +88,27 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 	
 	var _collisionBox = collision_point(x, y, obj_attackBox, false, true);
 	if instance_exists(_collisionBox) {
-		//check blocked
-		if sprite_index == spr_player_block and image_index < blockEndIndex {
-			//possible parry?
-			blockTime = blockTimeMax;
-			state = pState.idle;
-		} else if _collisionBox.myID != playerID { //not my hit => get hit
-			audio_play_sound(choose(snd_hit_1, snd_hit_2, snd_hit_3), 1, false);
-			gpHitGround = false;
-			pushBack(_collisionBox);
-			var _newHp = hp - _collisionBox.damage;
-			if _newHp <= 0 { //die
-				hp = 0;
-				state = pState.dead;
-			} else {
-				hp = _newHp;
-				state = pState.hit;
+		if array_contains(hitBy, _collisionBox) { //already hit by that
+			//?
+		} else {
+			array_push(hitBy, _collisionBox);
+			//check blocked
+			if sprite_index == spr_player_block and image_index < blockEndIndex {
+				//possible parry?
+				blockTime = blockTimeMax;
+				state = pState.idle;
+			} else if _collisionBox.myID != playerID { //not my hit => get hit
+				audio_play_sound(choose(snd_hit_1, snd_hit_2, snd_hit_3), 1, false);
+				gpHitGround = false;
+				pushBack(_collisionBox);
+				var _newHp = hp - _collisionBox.damage;
+				if _newHp <= 0 { //die
+					hp = 0;
+					state = pState.dead;
+				} else {
+					hp = _newHp;
+					state = pState.hit;
+				}
 			}
 		}
 		//instance_destroy(_collisionBox); //maybe? might want to keep it to hit multiple people
@@ -158,16 +163,42 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 		
 		case pState.dead: 
 			//set dead sprite
-			image_speed = 0;
-			xSpeed = 0;
-			ySpeed = 0;
-			pushBackX = 0;
-			pushBackY = 0;
+			if sprite_index != spr_player_die {
+				image_index = 0;
+				sprite_index = spr_player_die;
+				image_speed = iSpd.die;
+			}
+			if image_index >= image_number - 1 {
+				image_speed = 0;
+			}
+			
+			//xSpeed = 0;
+			//ySpeed = 0;
+			//pushBackX = 0;
+			//pushBackY = 0;
+			
+			if instance_exists(myHit) {
+				//send the data
+				if connected {
+					var _hit = scr_sendPlayerHit(playerID, myHit.x, myHit.y, 
+					myHit.image_xscale, myHit.image_yscale, -1, hitDir); //-1 indicates it should delete it
+	
+					if playerHost {
+						network_send_packet(obj_server.client, _hit, buffer_tell(_hit));
+					} else {
+						network_send_packet(obj_client.client, _hit, buffer_tell(_hit));	//send the packet to the server with clients socket
+					}
+							
+					buffer_delete(_hit);
+				}
+						
+				instance_destroy(myHit);
+			}
+			
 			doSprite = true;
 			stateJump = false;
 			gpHitGround = false;
 			myHit = noone;
-
 		break;
 		
 		case pState.idle:
@@ -179,6 +210,10 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 				sprite_index = spr_player_idle;
 			}
 			image_speed = iSpd.idle;
+			if keyBlock {
+				state = pState.blocking;
+				break;
+			}
 		}
 			xSpeed = 0;
 			stateJump = true;
@@ -186,9 +221,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 				state = pState.run;
 			} else if (keyAttack) {
 				state = pState.attacking;
-			} else if keyBlock {
-				state = pState.blocking;
-			}
+			} 
 		break;
 		
 		case pState.run: 
@@ -398,6 +431,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 			doSprite = true;
 			stateJump = false;
 			attack = attack_groundpound;
+			hitDir = point_direction(0, 0, 0, -1); //hit them straight up
 			if sprite_index != spr_player_groundpound {
 				image_index = 0;
 				sprite_index = spr_player_groundpound;
@@ -422,16 +456,17 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 						sprite_index = spr_player_groundpound_smoke;
 						image_speed = 15;
 					}
-					
 				} 
 			} else {
 				var _extend = image_xscale * (attack.length - (sprite_get_width(spr_boundary) * .5 / attack.xStretch));
 				if !instance_exists(myHit) {
-					myHit = instance_create_layer(x + _extend, y, layer,obj_attackBox);
-					myHit.myID = playerID;
-					myHit.damage = attack.damage;
-					myHit.dir = hitDir;
-					myHit.image_xscale = attack.xStretch;
+					if image_index < attack.attackBoxFrame {
+						myHit = instance_create_layer(x + _extend, y, layer,obj_attackBox);
+						myHit.myID = playerID;
+						myHit.damage = attack.damage;
+						myHit.dir = hitDir;
+						myHit.image_xscale = attack.xStretch;
+					}
 				} else {
 					myHit.x = x + _extend;
 					myHit.y = y;
@@ -450,9 +485,7 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 					}
 				}
 				
-				if image_index >= image_number - 1 {
-					gpHitGround = false;
-					state = pState.idle;
+				if image_index >= attack.attackBoxFrame {
 					if instance_exists(myHit) {
 						//send the data
 						if connected {
@@ -470,6 +503,11 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 						instance_destroy(myHit);
 					}
 					myHit = noone;
+				}
+				
+				if image_index >= image_number - 1 {
+					gpHitGround = false;
+					state = pState.idle;
 				}
 			}
 			
@@ -569,9 +607,22 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 	myHit = noone;
 	state = pState.idle;
 } else { //not my player but spawn effects
-	if state == pState.jump and prevState != pState.jump {
-		instance_create_depth(x, y + 7 + 3, depth, obj_smoke); //extra due to "lag"
+	if prevState != state {
+		if state == pState.jump {
+			instance_create_depth(x, y + 7 + 5, depth, obj_smoke); //extra due to "lag"
+			audio_play_sound(snd_jump, 1, false);
+		} else if state == pState.hit {
+			audio_play_sound(choose(snd_hit_1, snd_hit_2, snd_hit_3), 1, false);
+		} 
 	}
+	
+	if state == pState.groundpound and image_index <= gpEndFrame and place_meeting(x, y + 1, obj_floor) {
+		with instance_create_depth(x + 2, y + 7, depth - 1 , obj_smoke) {
+			sprite_index = spr_player_groundpound_smoke;
+			image_speed = 15;
+		}
+	}
+	
 	prevState = state;
 }
 

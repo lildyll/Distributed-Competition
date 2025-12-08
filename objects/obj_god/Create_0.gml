@@ -1,5 +1,5 @@
 global.port = 7676;
-global.ipDefault = "192.168.137.1";
+global.ipDefault = "127.0.0.1"; //"192.168.137.1";
 global.ip = global.ipDefault;
 global.networkType = network_socket_tcp;
 
@@ -16,8 +16,14 @@ enum network {
 	disconnect,
 	assignID,
 	nextRound,
-	text
+	text,
+	leaderboard
 }
+
+global.player1Wins = 0;
+global.player2Wins = 0;
+global.player3Wins = 0;
+global.player4Wins = 0;
 
 global.nextStageMatrix = scr_stage(0);
 global.nextStageNumber = 0;

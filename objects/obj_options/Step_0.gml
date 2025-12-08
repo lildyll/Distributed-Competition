@@ -1,6 +1,7 @@
 keyUpPressed = keyboard_check_pressed(vk_up) or keyboard_check_pressed(ord("W"));
 keyDownPressed = keyboard_check_pressed(vk_down) or keyboard_check_pressed(ord("S"));
 keySelect = keyboard_check_pressed(vk_space) or keyboard_check_pressed(vk_enter) or mouse_check_button_pressed(mb_left);
+keyESC = keyboard_check_pressed(vk_escape);
 
 if keyUpPressed {
 	audio_play_sound(snd_click, 1, false);
@@ -12,6 +13,11 @@ if keyUpPressed {
 	if selection > selectionMax selection = 0;
 }
 image_index = selection;
+
+if keyESC {
+	instance_destroy();
+	audio_play_sound(snd_click, 1, false);
+}
 
 if keySelect {
 	switch selection {
