@@ -10,5 +10,6 @@ if (string_length(_currentText) + 1) * spacing >= sprite_width {
 }
 
 if keyboard_check_pressed(vk_enter) {
+	connect = true;
 	instance_destroy();
 }

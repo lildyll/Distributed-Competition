@@ -1,5 +1,5 @@
 global.port = 7676;
-global.ipDefault = "127.0.0.1"; //"192.168.137.1";
+global.ipDefault = "192.168.137.1";
 global.ip = global.ipDefault;
 global.networkType = network_socket_tcp;
 

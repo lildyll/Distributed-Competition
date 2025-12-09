@@ -15,7 +15,7 @@ leftPlayerIDs = []; //stores left player IDs to reassign if someone leaves then 
 //track server stuff
 deadPlayers = -1;
 stage = -1;
-maxStage = 8;
+maxStage = 10;
 roundStart = true;
 setStage = false;
 winnerColor = c_white;

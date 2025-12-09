@@ -320,6 +320,8 @@ and !instance_exists(obj_transition) and !instance_exists(obj_textAnnouncement) 
 			doSprite = true;
 			//choose attack
 			if !attackChosen {
+				_leftRight = keyRight - keyLeft;
+				if _leftRight != 0 image_xscale = _leftRight;
 				hitDir = point_direction(0, y, image_xscale, y);
 				if sprite_index == spr_player_run or sprite_index == spr_player_idle {
 					attack = attack_punch1;

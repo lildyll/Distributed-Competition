@@ -7,3 +7,5 @@ textY = y;
 spacing = 6;
 playerID = 0;
 player = noone;
+
+connect = false;
